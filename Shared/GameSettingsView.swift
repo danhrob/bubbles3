@@ -103,7 +103,10 @@ struct GameSettingsView : View {
                                 _ in settings.viditelnaObrazovkaNastaveni = false}))
                     //$settings.viditelnaObrazovkaNastaveni
                 
-                Button("Exit") {  print("Exit")}
+                Button("Exit") {
+                    print("Exit")
+                    exit(0)
+                }
             }.padding()
         }.onAppear(){
             print("Form onAppear")
