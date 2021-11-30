@@ -9,8 +9,26 @@ import SwiftUI
 //for short sound sound playing
 import AVFoundation
 
-let widthBound      = UIScreen.main.bounds.width
-let heightBound     = UIScreen.main.bounds.height
+
+// added 30.11.2021 - get screen dim from any apple device (watchOS, iOS, macOS)
+class SGConvenience{
+    #if os(watchOS)
+    static var deviceWidth:CGFloat  = WKInterfaceDevice.current().screenBounds.size.width
+    static var deviceHeight:CGFloat = WKInterfaceDevice.current().screenBounds.size.height
+    #elseif os(iOS)
+    static var deviceWidth:CGFloat  = UIScreen.main.bounds.size.width
+    static var deviceHeight:CGFloat = UIScreen.main.bounds.size.height
+    #elseif os(macOS)
+    static var deviceWidth:CGFloat  = NSScreen.main.bounds.size.width
+    static var deviceHeight:CGFloat = NSScreen.main.bounds.size.height
+    #endif
+}
+
+// use the display dims in app
+let widthBound:  CGFloat         = SGConvenience.deviceWidth
+let heightBound: CGFloat         = SGConvenience.deviceHeight
+
+
 var bubbleContainer: [BubbleToDelegate]     =  []
 var pocetBublinNaPlose: Int                 = 0
 //zrychleni
@@ -25,6 +43,7 @@ var existujeOznacenaBublina                 = 0
 var smazatVsechnyOznacene : Int             = 0
 //var bubbleList: [bubbledata] = []
 var statusMessage                           = "Start"
+
 
 func playAudio() {
     
