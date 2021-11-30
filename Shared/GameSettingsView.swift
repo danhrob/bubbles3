@@ -55,6 +55,7 @@ class GameSettings:                 ObservableObject
     @Published var ukazVpravodoleZnaky          = "A-A"
     @Published var znakyKZobrazeni              = ["A","circle","triangle","A","square","B"]
     @Published var OznaceneId                   = ","    //"1,2,30," kvuli kliku s oznacenou bublinou se sem zapisou id oznacenych, aby se nezobrazovaly z hlavniho ContentView
+    @Published var zobrazitAppIdBubliny         = true
     @Published var dragGestureMultiple          = true  //muze se pouzivat generovani tahem
     @Published var zobrazovatObrazkyBublin      = true
     @Published var BubbleF: String              = "," //zde vsechny bubliny +..zalozeny k..kliknuty -..kOdstraneni

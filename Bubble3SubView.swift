@@ -98,6 +98,11 @@ struct Bubble3SubView: View {
                 } else {
                     Text(nahodnySymbol).foregroundColor(settings.barva).font(.system(size:40, weight:.bold))
                 }
+                // 1.12.2021 v nastaveni settings.zobrazitAppIdBubliny je moznost zobrazeni aplikacniho id bubliny
+                // bubliny, zde je videt, ze bubliny, ktere zanikly, odstrani svuj prostor v poli
+                // a na jejich misto se vytvori nove se stejnym id / dukaz o setreni pameti
+                if settings.zobrazitAppIdBubliny { Text("\(valueFromParent)").offset(y: 10).foregroundColor(.yellow).font(.system(size:15, weight:.bold))
+                }
 
                
             }

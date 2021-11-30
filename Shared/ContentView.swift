@@ -285,7 +285,12 @@ struct ContentView: View
                     if true && settings.dragGestureMultiple {
                         let cursorX         = value.location.x
                         let cursorY         = value.location.y
-
+                        
+                        // 30.11.2021 2352 memory get free from long strings
+                        bubbleList.removeAll {  smazBubbleListItem(  bublinaDokoncena: $0) }
+                        // odstranime BubbleF polozky dokoncene
+                        settings.BubbleF   = settings.BubbleF.replacingOccurrences(of: "\\d+-,", with: "", options: .regularExpression)
+                        
                         var b: bubbledata   = bubbledata (subviewVisibility: true,
                                                         x: 0, y: 0, dx: 20.0, dy: 30.0,
                                                         rotation: 20.0, loopTime: randomLoopTimeInterval(),
@@ -316,6 +321,11 @@ struct ContentView: View
                             let cursorX     = value.location.x
                             let cursorY     = value.location.y
                             
+                            // 30.11.2021 2352 memory get free from long strings
+                            // odstranime nadbytecne polozky
+                            bubbleList.removeAll {  smazBubbleListItem(  bublinaDokoncena: $0) }
+                            // odstranime BubbleF polozky dokoncene
+                            settings.BubbleF   = settings.BubbleF.replacingOccurrences(of: "\\d+-,", with: "", options: .regularExpression)
                             
                             
                         
