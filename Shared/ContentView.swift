@@ -10,7 +10,7 @@ import SwiftUI
 import AVFoundation
 
 
-// added 30.11.2021 - get screen dim from any apple device (watchOS, iOS, macOS)
+// added 30.11.2021 2319 - get screen dim from any apple device (watchOS, iOS, macOS)
 class SGConvenience{
     #if os(watchOS)
     static var deviceWidth:CGFloat  = WKInterfaceDevice.current().screenBounds.size.width
@@ -19,8 +19,8 @@ class SGConvenience{
     static var deviceWidth:CGFloat  = UIScreen.main.bounds.size.width
     static var deviceHeight:CGFloat = UIScreen.main.bounds.size.height
     #elseif os(macOS)
-    static var deviceWidth:CGFloat  = NSScreen.main.bounds.size.width
-    static var deviceHeight:CGFloat = NSScreen.main.bounds.size.height
+    static var deviceWidth:CGFloat  = (NSScreen.main?.frame.width)!
+    static var deviceHeight:CGFloat = (NSScreen.main?.frame.height)!
     #endif
 }
 
