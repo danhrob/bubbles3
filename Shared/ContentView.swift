@@ -1,13 +1,18 @@
 //
 //  ContentView.swift
+//  Bubbles
 //  Shared
 //
 //  Created by Dan on 20.10.2021.
+//  for 130 Ltd.
 //
 
+
+
 import SwiftUI
-//for short sound sound playing
-import AVFoundation
+import AVFoundation           //for short sound sound playing
+
+
 
 
 // added 30.11.2021 2319 - get screen dim from any apple device (watchOS, iOS, macOS)
@@ -24,39 +29,37 @@ class SGConvenience{
     #endif
 }
 
-// use the display dims in app
-let widthBound:  CGFloat         = SGConvenience.deviceWidth
-let heightBound: CGFloat         = SGConvenience.deviceHeight
 
 
-var bubbleContainer: [BubbleToDelegate] =  []
-var pocetBublinNaPlose: Int             = 0
-//zrychleni
-var ddx: Double                         = 0.5
-var ddy: Double                         = 0.1
+
+let widthBound:  CGFloat                = SGConvenience.deviceWidth  // use the display dims in app
+let heightBound: CGFloat                = SGConvenience.deviceHeight
+
+var bubbleContainer: [BubbleToDelegate] = []
+var pocetBublinNaPlose:    Int          = 0
+var ddx:                   Double       = 0.5 //zrychleni
+var ddy:                   Double       = 0.1
 let timerAccelerationModify             = 50
-var timerAccelerationModifyCounter      = 50 //every 20 cycles change of dx and dy
-//pridano k veku pri tahnuti
-var lifeAddition: Double                = 0
+var timerAccelerationModifyCounter      = 50  //every 20 cycles change of dx and dy
+var lifeAddition:          Double       = 0   //pridano k veku pri tahnuti
 var startDate                           = NSDate()
 var existujeOznacenaBublina             = 0
-var smazatVsechnyOznacene : Int         = 0
-//var bubbleList: [bubbledata] = []
+var smazatVsechnyOznacene: Int          = 0
 var statusMessage                       = "Start"
+                                              //var bubbleList: [bubbledata] = []
+
 
 
 func playAudio() {
     
-    // Load "pop.wav"
-    if let soundURL                 = Bundle.main.url(forResource: "pop", withExtension: "wav") {
-        var mySound: SystemSoundID = 0
-        AudioServicesCreateSystemSoundID(soundURL as CFURL, &mySound)
-        // Play
-        AudioServicesPlaySystemSound(mySound);
-        //usleep(1000)
+    if let soundURL = Bundle.main.url(forResource: "pop", withExtension: "wav") {       // Load "pop.wav"
+                      var mySound: SystemSoundID = 0
+                      AudioServicesCreateSystemSoundID(soundURL as CFURL, &mySound)
+                      AudioServicesPlaySystemSound(mySound); // Play
     }
     return
 }
+
 
 
 func playAsyncAudio() {
@@ -65,20 +68,28 @@ func playAsyncAudio() {
     })
 }
 
+
+
 func randomPlaceX()         -> CGFloat{
     let bubblexX: CGFloat   = CGFloat.random(in: 0...widthBound)
     return bubblexX
 }
+
+
 
 func randomPlaceY()         -> CGFloat {
     let bubbleyY: CGFloat   = CGFloat.random(in: 0...heightBound)
     return bubbleyY
 }
 
+
+
 func randomOffsetX()        -> CGFloat{
     let bubblexX: CGFloat   = CGFloat.random(in: -widthBound/2...widthBound)
     return bubblexX
 }
+
+
 
 func randomOffsetY()        -> CGFloat {
     let bubbleyY: CGFloat   = CGFloat.random(in: -heightBound/2...heightBound/2)
@@ -86,35 +97,48 @@ func randomOffsetY()        -> CGFloat {
 }
 
 
+
 func randomPlacedX()        -> CGFloat{
     let bubblexX: CGFloat   = CGFloat.random(in: -2.0...2.0)
     return bubblexX
 }
+
+
 
 func randomPlacedY()        -> CGFloat {
     let bubbleyY: CGFloat   = CGFloat.random(in: -2.0...2.0)
     return bubbleyY
 }
 
+
+
 func randomPlaceDdX()       -> CGFloat{
     let bubblexX: CGFloat   = CGFloat.random(in: -0.2...0.2)
     return bubblexX
 }
+
+
 
 func randomPlaceDdY()       -> CGFloat {
     let bubbleyY: CGFloat   = CGFloat.random(in: -0.2...0.2)
     return bubbleyY
 }
 
+
+
 func randomRotation()       -> CGFloat {
     let bubbleyY: CGFloat   = CGFloat.random(in: -359...359)
     return bubbleyY
 }
 
+
+
 func randomBubbleType()     -> Int {
     let bubletypeInt: Int   = Int.random (in: 1...15)
     return bubletypeInt
 }
+
+
 
 func randomLoopTimeInterval() -> CGFloat {
     let bubleLoopInt: CGFloat = CGFloat.random (in: 1...20)
@@ -123,25 +147,29 @@ func randomLoopTimeInterval() -> CGFloat {
 
 
 
-struct ContentView: View
-{
-    @State var xPos5: CGFloat                   = 270
-    @State var yPos5: CGFloat                   = 150
-    @State var offset2: CGSize                  = .zero
-    @State var currentValue                     = 0
-    @State var shouldReset: Bool                = false
-    @State var stringArray: [String]            = ["bublina cislo", "co se s ni stalo"]
-    @State var jsonSettings: String             = ""
-    @State var smazVsechnyOznacene: Int         = 0
-    @State var bubbleList: [bubbledata]         = []
-    @StateObject var settings                   = GameSettings()
+struct ContentView: View {
+    
+    @State var xPos5: CGFloat           = 270
+    @State var yPos5: CGFloat           = 150
+    @State var offset2: CGSize          = .zero
+    @State var currentValue             = 0
+    @State var shouldReset: Bool        = false
+    @State var stringArray: [String]    = ["bublina cislo", "co se s ni stalo"]
+    @State var jsonSettings: String     = ""
+    @State var smazVsechnyOznacene: Int = 0
+    @State var bubbleList: [bubbledata] = []
+    @StateObject var settings           = GameSettings()
 
+    
+    
     func smazBubbleListItem (bublinaDokoncena: bubbledata) -> Bool {
         if settings.BubbleF.contains(String(bublinaDokoncena.arrayId) + "-") {
             return true
         }
         return false
     }
+    
+    
     
     func obsahujeVicBublin (vstupniId: Int) -> Int {
         // takove bubliny nezobrazime
@@ -157,6 +185,8 @@ struct ContentView: View
         }
         return 0
     }
+    
+    
     
     var body: some View
     {
@@ -278,7 +308,6 @@ struct ContentView: View
             
 
  
-   
           .gesture(
             DragGesture(minimumDistance:10)
                 .onChanged({value in
@@ -286,19 +315,20 @@ struct ContentView: View
                         let cursorX         = value.location.x
                         let cursorY         = value.location.y
                         
-                        // 30.11.2021 2352 memory get free from long strings
-                        bubbleList.removeAll {  smazBubbleListItem(  bublinaDokoncena: $0) }
-                        // odstranime BubbleF polozky dokoncene
-                        settings.BubbleF   = settings.BubbleF.replacingOccurrences(of: "\\d+-,", with: "", options: .regularExpression)
+                        bubbleList.removeAll {  smazBubbleListItem(  bublinaDokoncena: $0) } // 30.11.2021 2352 memory get free from long strings
+                        settings.BubbleF   = settings.BubbleF.replacingOccurrences(of: "\\d+-,", with: "", options: .regularExpression) // odstranime BubbleF polozky dokoncene
                         
-                        var b: bubbledata   = bubbledata (subviewVisibility: true,
+                        var b: bubbledata = bubbledata (subviewVisibility: true,
                                                         x: 0, y: 0, dx: 20.0, dy: 30.0,
-                                                        rotation: 20.0, loopTime: randomLoopTimeInterval(),
-                                                          lifeTime: 10000, type: randomBubbleType(),arrayId: bubbleList.count)
-                        b.x                 = cursorX // randomPlaceX()//CGFloat( n * 15)
-                        b.y                 = cursorY //randomPlaceY() //CGFloat(n * 30)
-                        b.dx                = randomPlacedX()
-                        b.dy                = randomPlacedY()
+                                                        rotation: 20.0,
+                                                        loopTime: randomLoopTimeInterval(),
+                                                        lifeTime: 10000,
+                                                            type: randomBubbleType(),
+                                                         arrayId: bubbleList.count)
+                        b.x  = cursorX
+                        b.y  = cursorY
+                        b.dx = randomPlacedX()
+                        b.dy = randomPlacedY()
 
                         if true {// pocetBublinNaPlose <= bubbleNumMax && prekreslit
                         
@@ -329,20 +359,24 @@ struct ContentView: View
                             
                             
                         
-                            var b: bubbledata   = bubbledata (subviewVisibility: true, x: 0, y: 0, dx: 20.0, dy: 30.0,
-                                                              rotation: 20.0, loopTime: randomLoopTimeInterval(), lifeTime: 100000,
-                                                              type: randomBubbleType(), arrayId: bubbleList.count)
-                            b.x             = cursorX
-                            b.y             = cursorY
-                            b.dx            = randomPlacedX()
-                            b.dy            = randomPlacedY()
+                            var b: bubbledata   = bubbledata (subviewVisibility: true,
+                                                              x: 0, y: 0, dx: 20.0, dy: 30.0,
+                                                              rotation: 20.0,
+                                                              loopTime: randomLoopTimeInterval(),
+                                                              lifeTime: 100000,
+                                                                  type: randomBubbleType(),
+                                                               arrayId: bubbleList.count)
+                            b.x  = cursorX
+                            b.y  = cursorY
+                            b.dx = randomPlacedX()
+                            b.dy = randomPlacedY()
                             //debug if pocetBublinNaPlose <= bubbleNumMax && prekreslit
                             if true {
                            
-                                self.xPos5          = cursorX
-                                self.yPos5          = cursorY
-                                b.arrayId           = bubbleList.count
-                                settings.BubbleF    = settings.BubbleF + String(b.arrayId) + ","
+                                self.xPos5       = cursorX
+                                self.yPos5       = cursorY
+                                b.arrayId        = bubbleList.count
+                                settings.BubbleF = settings.BubbleF + String(b.arrayId) + ","
                                
                                 bubbleList.append(b)
                                 pocetBublinNaPlose  += 1
@@ -359,8 +393,9 @@ struct ContentView: View
 }
 
 
-struct ContentView_Previews:    PreviewProvider {
-    static var previews:        some View {
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
         ContentView()
     }
 }

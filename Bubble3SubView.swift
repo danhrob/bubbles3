@@ -1,50 +1,59 @@
 //
 //  Bubble3SubView.swift
-//  bubbles3
+//  Bubbles
 //
 //  Created by Dan on 03.11.2021.
+//  for 130 Ltd.
 //
+
+
 
 import SwiftUI
 import Foundation
 
+
+
 struct Bubble3SubView: View {
     
-    @Binding var shouldReset:               Bool
-    @Binding var stringArray:               [String]
-    @Binding var smazVsechnyOznacene:       Int
-    @EnvironmentObject var settings:        GameSettings //zde jsou vsechna nastaveni
+    @Binding var shouldReset:         Bool
+    @Binding var stringArray:         [String]
+    @Binding var smazVsechnyOznacene: Int
+    @EnvironmentObject var settings:  GameSettings //zde jsou vsechna nastaveni
 
-    @State var valueFromParent : Int        = 0 // projectedValue - jmeno (cislo), ktere dostane kazda bublina od rodice - aby se dala smazat v pripade potreby
-    @State private var showMessage          = false
-    @State private var offsetx: CGFloat     = 0
-    @State private var offsety: CGFloat     = 0
-    @State private var bubbleTypeNo: Int    = randomBubbleType()
-    @State private var rotatex: Double      = 0
-    @State private var opacityx: Double     = 1
-    @State var positionx: Double        //  = 50
-    @State var positiony: Double        //  = 50
-    @State private var lifetimex: Double    = 10.0//Double.random(in: 10...20)
-    @State private var shouldResetx: Bool   = false
-    @State var napis: String                = zobrazNahodnySymbol()
-    /* v pripade kliknuti na bublinu, ktera je oznacitelna, napr. "A",
-     se informace prihraje do vybranoStatus - sem - pro zobrazeni a jako globalni informace pro ostatni "A"
-     do informacniho pole
-     */
-    @State private var vybranoStatus: Int   = 0  //v pripade kliknuti na "A" se tato B. oznaci
-    var indexPoleHodnot: Int                = 0
+    @State var valueFromParent :      Int     = 0  // projectedValue - jmeno (cislo), ktere dostane kazda bublina od                                                    rodice - aby se dala smazat v pripade potreby
+    @State private var showMessage            = false
+    @State private var offsetx:       CGFloat = 0
+    @State private var offsety:       CGFloat = 0
+    @State private var bubbleTypeNo:  Int     = randomBubbleType()
+    @State private var rotatex:       Double  = 0
+    @State private var opacityx:      Double  = 1
+    @State var positionx:             Double       //= 50
+    @State var positiony:             Double       //= 50
+    @State private var lifetimex:     Double  = 10.0 // Double.random(in: 10...20)
+    @State private var shouldResetx:  Bool    = false
+    @State var napis:                 String  = zobrazNahodnySymbol()
+                                                   /* v pripade kliknuti na bublinu, ktera je oznacitelna, napr. "A",
+                                                      se informace prihraje do vybranoStatus - sem - pro zobrazeni a jako globalni informace pro ostatni "A"
+                                                      do informacniho pole
+                                                   */
+    @State private var vybranoStatus: Int     = 0  //v pripade kliknuti na "A" se tato B. oznaci
+    var indexPoleHodnot:              Int     = 0
     
+    
+    
+    
+    init (bubblePosX: Double, bubblePosY: Double, IdFromParent: Int, shouldReset: Binding<Bool>, stringArray: Binding<[String]>, smazVsechnyOznacene: Binding<Int> ) {
         
-    init (bubblePosX: Double, bubblePosY: Double, IdFromParent: Int, shouldReset: Binding<Bool>, stringArray: Binding<[String]>, smazVsechnyOznacene: Binding<Int> )
-    {
-        positionx                           = bubblePosX
-        positiony                           = bubblePosY
-        valueFromParent                     = IdFromParent
-        self._shouldReset                   = shouldReset
-        self._stringArray                   = stringArray
-        self._smazVsechnyOznacene           = smazVsechnyOznacene
+        positionx                  = bubblePosX
+        positiony                  = bubblePosY
+        valueFromParent            = IdFromParent
+        self._shouldReset          = shouldReset
+        self._stringArray          = stringArray
+        self._smazVsechnyOznacene  = smazVsechnyOznacene
 
     }
+    
+    
     
     func obsahujeVicBublin (vstupniId: Int) -> Int {
         // takove bubliny nezobrazime
@@ -59,6 +68,8 @@ struct Bubble3SubView: View {
         }
         return 0
     }
+    
+    
     
     func bublinaKZobrazeni (IdB: Int) -> Bool {
         // vysvetleni zobrazeni bubliny s id cislem: IdB
@@ -75,6 +86,8 @@ struct Bubble3SubView: View {
         }
         return true
     }
+    
+    
     
     var body: some View {
         
@@ -103,8 +116,6 @@ struct Bubble3SubView: View {
                 // a na jejich misto se vytvori nove se stejnym id / dukaz o setreni pameti
                 if settings.zobrazitAppIdBubliny { Text("\(valueFromParent)").offset(y: 10).foregroundColor(.yellow).font(.system(size:15, weight:.bold))
                 }
-
-               
             }
             .position(x: positionx,
                       y: positiony)
