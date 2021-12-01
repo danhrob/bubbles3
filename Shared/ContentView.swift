@@ -29,20 +29,20 @@ let widthBound:  CGFloat         = SGConvenience.deviceWidth
 let heightBound: CGFloat         = SGConvenience.deviceHeight
 
 
-var bubbleContainer: [BubbleToDelegate]     =  []
-var pocetBublinNaPlose: Int                 = 0
+var bubbleContainer: [BubbleToDelegate] =  []
+var pocetBublinNaPlose: Int             = 0
 //zrychleni
-var ddx: Double                             = 0.5
-var ddy: Double                             = 0.1
-let timerAccelerationModify                 = 50
-var timerAccelerationModifyCounter          = 50 //every 20 cycles change of dx and dy
+var ddx: Double                         = 0.5
+var ddy: Double                         = 0.1
+let timerAccelerationModify             = 50
+var timerAccelerationModifyCounter      = 50 //every 20 cycles change of dx and dy
 //pridano k veku pri tahnuti
-var lifeAddition: Double                    = 0
-var startDate                               = NSDate()
-var existujeOznacenaBublina                 = 0
-var smazatVsechnyOznacene : Int             = 0
+var lifeAddition: Double                = 0
+var startDate                           = NSDate()
+var existujeOznacenaBublina             = 0
+var smazatVsechnyOznacene : Int         = 0
 //var bubbleList: [bubbledata] = []
-var statusMessage                           = "Start"
+var statusMessage                       = "Start"
 
 
 func playAudio() {
