@@ -30,10 +30,10 @@
             filePath = "Shared/GameSettingsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
-            landmarkName = "GameSettingsView"
-            landmarkType = "14">
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "cancelSettingsScreen()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

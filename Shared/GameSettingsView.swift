@@ -61,6 +61,7 @@ class GameSettings:                 ObservableObject
     @Published var viditelnaObrazovkaSbublinami = true
     @Published var viditelnaObrazovkaUvodPopis  = false
     @Published var viditelnaObrazovkaNastaveni  = false
+    @Published var minDistanceForSingleClick    = 0.0
     @Published var viditelneScore               = false
     @Published var viditelneLevel               = true
     @Published var SpodniLevelNapis             = "level #2"
@@ -87,6 +88,7 @@ struct GameSettingsView : View {
     func cancelSettingsScreen () {
         viditelnaObrazovkaNastaveni             = false
         settings.viditelnaObrazovkaNastaveni    = false
+        settings.minDistanceForSingleClick      = 0 // set it can react for single click(drag 0 points) on main layer
     }
     
     init () {
@@ -116,9 +118,8 @@ struct GameSettingsView : View {
                     DragGesture(minimumDistance: 0)
                         .onEnded(
                             {
-                                _ in settings.viditelnaObrazovkaNastaveni = false}))
-                    //$settings.viditelnaObrazovkaNastaveni
-                
+                                _ in settings.viditelnaObrazovkaNastaveni = false
+                                cancelSettingsScreen()                            }))
                 Button("Exit") {
                     print("Exit")
                     exit(0)

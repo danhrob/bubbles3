@@ -8,10 +8,8 @@
 //
 
 
-
 import SwiftUI
 import AVFoundation           //for short sound sound playing
-
 
 
 
@@ -46,8 +44,7 @@ var startDate                           = NSDate()
 var existujeOznacenaBublina             = 0
 var smazatVsechnyOznacene: Int          = 0
 var statusMessage                       = "Start"
-                                              //var bubbleList: [bubbledata] = []
-
+//var bubbleList: [bubbledata] = []
 
 
 func playAudio() {
@@ -200,7 +197,6 @@ struct ContentView: View {
                 ZStack
             {
                 //zobrazeni bublin
-
                 ForEach(bubbleList, id: \.self) {bubbledata in
                     //if true //obsahujeVicBublin(vstupniId: bubbledata.arrayId)==0
                     // string obsahuje bubbledata.arrayId-, pak nezakladej Bubble3SubView//!settings.OznaceneId.contains( String(bubbledata.arrayId) + "," )
@@ -253,10 +249,9 @@ struct ContentView: View {
             if shouldReset          == true { //vyvolej prekresleni hlavniho ContentView
                  ZStack {
                   }.onAppear(perform: {
-                
                      shouldReset        = false
-
-                 })
+                      
+                  })
              }
             
             VStack {
@@ -268,14 +263,18 @@ struct ContentView: View {
                         }
                     }.opacity(0.98).clipShape(RoundedRectangle(cornerRadius: 12))
                         .padding().zIndex(1)
+                        .onAppear(perform: {
+                            
+                        })
+                    
                        
                 }
                 else {
                     HStack {
                         Text ("*").foregroundColor(.yellow).font(.system(size:30, weight:.bold)).onTapGesture {
                             // kliknuto na *, ktera znaci zmenu do vychoziho rezimu
-                            settings.viditelnaObrazovkaNastaveni = true
-                            
+                            settings.viditelnaObrazovkaNastaveni    = true
+                            settings.minDistanceForSingleClick      = 100.0 // disable single click on main screen when settings form is on
                         }
                         Spacer()
                         Text(settings.horniNapis).foregroundColor(.yellow)
@@ -305,9 +304,7 @@ struct ContentView: View {
         }
         }
         .environmentObject(settings)
-            
 
- 
           .gesture(
             DragGesture(minimumDistance:10)
                 .onChanged({value in
@@ -343,7 +340,7 @@ struct ContentView: View {
                 })
         )
         .gesture(
-            DragGesture(minimumDistance: 0)
+            DragGesture(minimumDistance: settings.minDistanceForSingleClick) // for single click = 0
                 .onEnded(
                     {
                         value in
@@ -386,6 +383,7 @@ struct ContentView: View {
                 )
             )
     }
+    
     func reset() {
         self.shouldReset = true
     }
