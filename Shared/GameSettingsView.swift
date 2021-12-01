@@ -32,7 +32,11 @@ struct JsonSettings: Codable {
     var horniNapis                   = "find and click A-A"
     var ukazVpravodoleZnaky          = "A-A"
     var znakyKZobrazeni              = ["A","circle","triangle","A","square","B"]
-
+    var animationDuration            = 8.0
+    var lifeDuration                 = 8.0
+    var rozptylLifeDuration          = 4.0
+    var casoveUkonceniZivotaBubl     = true
+    //var barva                      = Color.orange
 }
 
 
@@ -54,6 +58,7 @@ class GameSettings:                 ObservableObject
     @Published var horniNapis                   = "find and click A-A"
     @Published var ukazVpravodoleZnaky          = "A-A"
     @Published var znakyKZobrazeni              = ["A","circle","triangle","A","square","B"]
+    @Published var znakyKVyhledani              = ["A"]
     @Published var OznaceneId                   = ","    //"1,2,30," kvuli kliku s oznacenou bublinou se sem zapisou id oznacenych, aby se nezobrazovaly z hlavniho ContentView
     @Published var zobrazitAppIdBubliny         = false
     @Published var dragGestureMultiple          = true  //muze se pouzivat generovani tahem
