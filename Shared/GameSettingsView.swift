@@ -21,6 +21,13 @@ extension Encodable {
     }
 }
 
+extension Color {
+    // get Color from String field RGB
+    static func getColorFromRgbStrings (StringField: [String]) -> Color {
+        return Color(red: Double(StringField[0])!, green: Double(StringField[1])!, blue: Double(StringField[2])!)
+    }
+}
+
 struct User: Codable {
      var id:        Int
      var name:      String
@@ -36,7 +43,8 @@ struct JsonSettings: Codable {
     var lifeDuration                 = 8.0
     var rozptylLifeDuration          = 4.0
     var casoveUkonceniZivotaBubl     = true
-    //var barva                      = Color.orange
+    var znakyKVyhledani              = ["A"]
+    var barvaRgb                     = ["255", "165", "0"] //Color.orange
 }
 
 
@@ -44,6 +52,7 @@ class GameSettings:                 ObservableObject
 {
     @Published var score                        = 0
     @Published var oznaceno                     = 0
+    @Published var barvaRgb                     = ["255", "165", "0"]
     @Published var barva                        = Color.orange
     @Published var casoveUkonceniZivotaBubl     = true //false
     @Published var animationDuration            = 8.0
@@ -88,13 +97,14 @@ struct GameSettingsView : View {
         
         
         //Text("Score:\(settings.score)").foregroundColor(.yellow)
-        
+        VStack {
         Form {
             Text("Settings").font(.largeTitle)
             Section {
                 Toggle(isOn: $settings.casoveUkonceniZivotaBubl){
                     Text("Life timing of the bubble")}
                 Stepper(onIncrement:{}, onDecrement: {}){Text("Speed")}
+                ColorPicker("Set the bubble text color", selection: $settings.barva)
                 Button("Default settings") {print("button Default settings")}
                 
             }.padding()
@@ -123,6 +133,7 @@ struct GameSettingsView : View {
             print(jsonSettings.convertToString!)
         }
         
+    }
     }
   
     
