@@ -50,7 +50,6 @@ struct Bubble3SubView: View {
         self._shouldReset          = shouldReset
         self._stringArray          = stringArray
         self._smazVsechnyOznacene  = smazVsechnyOznacene
-
     }
     
     
@@ -179,8 +178,9 @@ struct Bubble3SubView: View {
                         stringArray[0]          = String(valueFromParent)
                         // play bubble sound after single click on the bubble
                         playAudio()
-                                   
-                        if napis == "A" { //kliknu na bubl. s A
+                        // 2.12.2021 - added char for searching from settings
+                        // TODO: searching sequence of chars in znakyKVyhledani
+                        if napis == settings.znakyKVyhledani[0] { // "A" { //kliknu na bubl. s A
                             //nebylo zatim na tuhle kliknuto, nyni je, bude se vykreslovat s krouzkem
                             //a ceka, az nekdo klikne na jinou
                             //tj. 1.krok

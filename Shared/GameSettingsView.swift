@@ -38,7 +38,7 @@ struct JsonSettings: Codable {
     var SpodniLevelNapis             = "level #2"
     var horniNapis                   = "find and click A-A"
     var ukazVpravodoleZnaky          = "A-A"
-    var znakyKZobrazeni              = ["A","circle","triangle","A","square","B"]
+    var znakyKZobrazeni              = ["A","circle","triangle","A","square","\u{05d0}","\u{03a9}"]
     var animationDuration            = 8.0
     var lifeDuration                 = 8.0
     var rozptylLifeDuration          = 4.0
@@ -47,6 +47,18 @@ struct JsonSettings: Codable {
     var barvaRgb                     = ["255", "165", "0"] //Color.orange
 }
 
+class GameSettingsIO {
+    static func writeStringToDisc(inputString: String) -> String {
+        
+        return ""
+    }
+    
+    static func getZnakyKZobrazeniJoin(inputStringF: [String]) -> String {
+        let inputStringField = inputStringF.joined(separator:"")
+        return inputStringField
+    }
+    
+}
 
 class GameSettings:                 ObservableObject
 {
@@ -65,10 +77,10 @@ class GameSettings:                 ObservableObject
     @Published var viditelneScore               = false
     @Published var viditelneLevel               = true
     @Published var SpodniLevelNapis             = "level #2"
-    @Published var horniNapis                   = "find and click A-A"
+    @Published var horniNapis                   = "find and click M"// \u{03a9}-\u{03a9}"
     @Published var ukazVpravodoleZnaky          = "A-A"
-    @Published var znakyKZobrazeni              = ["A","circle","triangle","A","square","B"]
-    @Published var znakyKVyhledani              = ["A"]
+    @Published var znakyKZobrazeni              = ["A","circle","triangle","A","square","\u{05d0}","\u{03a9}"]
+    @Published var znakyKVyhledani              = ["\u{03a9}"]
     @Published var OznaceneId                   = ","    //"1,2,30," kvuli kliku s oznacenou bublinou se sem zapisou id oznacenych, aby se nezobrazovaly z hlavniho ContentView
     @Published var zobrazitAppIdBubliny         = false
     @Published var dragGestureMultiple          = true  //muze se pouzivat generovani tahem
@@ -83,12 +95,22 @@ class GameSettings:                 ObservableObject
 
 struct GameSettingsView : View {
     @EnvironmentObject var settings:        GameSettings //zde jsou vsechna nastaveni
-    @State var viditelnaObrazovkaNastaveni: Bool = false     //settings.viditelnaObrazovkaNastaveni
+    @State var viditelnaObrazovkaNastaveni:Bool = false     //settings.viditelnaObrazovkaNastaveni
+    @State var lettersSettingsDialog: Bool      = false
+    @State private var lettersToView: String    = "abcd" //getInputStringKZobrazeni()
+    @State private var lettersToFind: String    = "A"
+    @State var znakyKZobrazeni: [String]         = ["C","D","A"] //settings.
+
+    func getInputStringKZobrazeni() -> String {
+        let znakyKZobrazeniF : [String] = settings.znakyKZobrazeni
+        return znakyKZobrazeniF.joined(separator: "")
+    }
     
     func cancelSettingsScreen () {
         viditelnaObrazovkaNastaveni             = false
         settings.viditelnaObrazovkaNastaveni    = false
         settings.minDistanceForSingleClick      = 0 // set it can react for single click(drag 0 points) on main layer
+        settings.znakyKZobrazeni = znakyKZobrazeni
     }
     
     init () {
@@ -107,19 +129,36 @@ struct GameSettingsView : View {
                     Text("Life timing of the bubble")}
                 Stepper(onIncrement:{}, onDecrement: {}){Text("Speed")}
                 ColorPicker("Set the bubble text color", selection: $settings.barva)
+                Button("Letters to find and click") {
+                    lettersSettingsDialog = true
+                    print("button Letter settings")}
+                if lettersSettingsDialog {
+                    VStack {
+                        TextField("Enter letters to view", text: $lettersToView)
+                           .onAppear(perform: {
+                            //lettersToView = getInputStringKZobrazeni()
+                           })
+                        Button("Save letters settings") {
+                            //settings.znakyKZobrazeni = lettersToView.components(separatedBy:"")
+                            lettersSettingsDialog = false
+                            settings.znakyKZobrazeni = lettersToView.components(separatedBy:"")
+                        }
+                    }
+                }
                 Button("Default settings") {print("button Default settings")}
                 
             }.padding()
             Section {
                 Button("Save and continue") {
                     cancelSettingsScreen()
+                    settings.znakyKZobrazeni = lettersToView.components(separatedBy:"")
                     print("button Save and continue")}
-                .gesture(
-                    DragGesture(minimumDistance: 0)
-                        .onEnded(
-                            {
-                                _ in settings.viditelnaObrazovkaNastaveni = false
-                                cancelSettingsScreen()                            }))
+//                .gesture(
+//                    DragGesture(minimumDistance: 0)
+//                        .onEnded(
+//                            {
+//                                _ in settings.viditelnaObrazovkaNastaveni = false
+//                                cancelSettingsScreen()                            }))
                 Button("Exit") {
                     print("Exit")
                     exit(0)
