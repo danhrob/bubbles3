@@ -145,13 +145,10 @@ struct Bubble3SubView: View {
                         statusMessage       = "You Won!" //konec hry
                         shouldReset             = true
                     }
- 
-                    //prasknuti neprehravame, kdyz uz tam bubliny nejsou
-                    if statusMessage.contains("Start") {
-                        playAudio()
                         
-                    }
-
+                    // play audio after the bubble burst spontaneneously
+                    playAudio()
+                        
                     if settings.BubbleF.contains(String(valueFromParent) + ",") {
 
                         settings.BubbleF = settings.BubbleF.replacingOccurrences(of: (String(valueFromParent) + ","), with: (String(valueFromParent) + "-,"))
@@ -180,12 +177,9 @@ struct Bubble3SubView: View {
                         }
 
                         stringArray[0]          = String(valueFromParent)
-                    
-                        if statusMessage.contains("Start") {
-                            playAudio()
-                          }
-                                               
-                        
+                        // play bubble sound after single click on the bubble
+                        playAudio()
+                                   
                         if napis == "A" { //kliknu na bubl. s A
                             //nebylo zatim na tuhle kliknuto, nyni je, bude se vykreslovat s krouzkem
                             //a ceka, az nekdo klikne na jinou
