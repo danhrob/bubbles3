@@ -77,8 +77,8 @@ class GameSettings:                 ObservableObject
     @Published var viditelneScore               = false
     @Published var viditelneLevel               = true
     @Published var SpodniLevelNapis             = "level #2"
-    @Published var horniNapis                   = "find and click M"// \u{03a9}-\u{03a9}"
-    @Published var ukazVpravodoleZnaky          = "A-A"
+    @Published var horniNapis                   = "find and click \u{03a9}-\u{03a9}"
+    @Published var ukazVpravodoleZnaky          = "\u{03a9}-\u{03a9}"
     @Published var znakyKZobrazeni              = ["A","circle","triangle","A","square","\u{05d0}","\u{03a9}"]
     @Published var znakyKVyhledani              = ["\u{03a9}"]
     @Published var OznaceneId                   = ","    //"1,2,30," kvuli kliku s oznacenou bublinou se sem zapisou id oznacenych, aby se nezobrazovaly z hlavniho ContentView
