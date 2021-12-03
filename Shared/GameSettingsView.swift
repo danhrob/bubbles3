@@ -39,8 +39,8 @@ struct JsonSettings: Codable {
     var horniNapis                   = "find and click A-A"
     var ukazVpravodoleZnaky          = "A-A"
     var znakyKZobrazeni              = ["A","circle","triangle","A","square","\u{05d0}","\u{03a9}"]
-    var animationDuration            = 8.0
-    var lifeDuration                 = 8.0
+    var animationDuration            = 16.0
+    var lifeDuration                 = 16.0
     var rozptylLifeDuration          = 4.0
     var casoveUkonceniZivotaBubl     = true
     var znakyKVyhledani              = ["A"]
@@ -54,7 +54,7 @@ class GameSettingsIO {
     }
     
     static func getZnakyKZobrazeniJoin(inputStringF: [String]) -> String {
-        let inputStringField = inputStringF.joined(separator:"")
+        let inputStringField = inputStringF.joined(separator:",")
         return inputStringField
     }
     
@@ -67,8 +67,8 @@ class GameSettings:                 ObservableObject
     @Published var barvaRgb                     = ["255", "165", "0"]
     @Published var barva                        = Color.orange
     @Published var casoveUkonceniZivotaBubl     = true //false
-    @Published var animationDuration            = 8.0
-    @Published var lifeDuration                 = 8.0
+    @Published var animationDuration            = 26.0
+    @Published var lifeDuration                 = 26.0
     @Published var rozptylLifeDuration          = 4.0
     @Published var viditelnaObrazovkaSbublinami = true
     @Published var viditelnaObrazovkaUvodPopis  = false
@@ -97,20 +97,20 @@ struct GameSettingsView : View {
     @EnvironmentObject var settings:        GameSettings //zde jsou vsechna nastaveni
     @State var viditelnaObrazovkaNastaveni:Bool = false     //settings.viditelnaObrazovkaNastaveni
     @State var lettersSettingsDialog: Bool      = false
-    @State private var lettersToView: String    = "abcd" //getInputStringKZobrazeni()
+    @State private var lettersToView: String    = "A,B,C,D"
     @State private var lettersToFind: String    = "A"
-    @State var znakyKZobrazeni: [String]         = ["C","D","A"] //settings.
+    @State var znakyKZobrazeni: [String]        = ["C","D","A"]
 
     func getInputStringKZobrazeni() -> String {
         let znakyKZobrazeniF : [String] = settings.znakyKZobrazeni
-        return znakyKZobrazeniF.joined(separator: "")
+        return znakyKZobrazeniF.joined(separator: ",")
     }
     
     func cancelSettingsScreen () {
         viditelnaObrazovkaNastaveni             = false
         settings.viditelnaObrazovkaNastaveni    = false
         settings.minDistanceForSingleClick      = 0 // set it can react for single click(drag 0 points) on main layer
-        settings.znakyKZobrazeni = znakyKZobrazeni
+        print("cancelSettingsScreen GameSettingsView settings.znakyKZobrazeni:\(settings.znakyKZobrazeni), znakyKZobrazeni:\(znakyKZobrazeni) ")
     }
     
     init () {
@@ -118,9 +118,7 @@ struct GameSettingsView : View {
     }
     
     var body: some View {
-        
-        
-        //Text("Score:\(settings.score)").foregroundColor(.yellow)
+
         VStack {
         Form {
             Text("Settings").font(.largeTitle)
@@ -136,47 +134,43 @@ struct GameSettingsView : View {
                     VStack {
                         TextField("Enter letters to view", text: $lettersToView)
                            .onAppear(perform: {
-                            //lettersToView = getInputStringKZobrazeni()
+                            lettersToView = getInputStringKZobrazeni()
                            })
                         Button("Save letters settings") {
-                            //settings.znakyKZobrazeni = lettersToView.components(separatedBy:"")
+
                             lettersSettingsDialog = false
-                            settings.znakyKZobrazeni = lettersToView.components(separatedBy:"")
+                            settings.znakyKZobrazeni = lettersToView.components(separatedBy:",")
+                            // print("letters settings lettersToView:\(lettersToView)")
                         }
                     }
                 }
                 Button("Default settings") {print("button Default settings")}
                 
+                
             }.padding()
             Section {
                 Button("Save and continue") {
+                    settings.znakyKZobrazeni = lettersToView.components(separatedBy:",")
                     cancelSettingsScreen()
-                    settings.znakyKZobrazeni = lettersToView.components(separatedBy:"")
-                    print("button Save and continue")}
-//                .gesture(
-//                    DragGesture(minimumDistance: 0)
-//                        .onEnded(
-//                            {
-//                                _ in settings.viditelnaObrazovkaNastaveni = false
-//                                cancelSettingsScreen()                            }))
+                    //print("button Save and continue")
+                    //print("Save and continue lettersToView:\(lettersToView), znakyKZobrazeni:\(settings.znakyKZobrazeni)")
+                }
                 Button("Exit") {
-                    print("Exit")
+                    //print("Exit")
                     exit(0)
                 }
             }.padding()
         }.onAppear(){
-            print("Form onAppear")
+            //print("Form onAppear")
             //json test
-            let user = User(id: 1, name: "name")
-            print(user.convertToString!)
+            //let user         = User(id: 1, name: "name")
+            //print(user.convertToString!)
             let jsonSettings = JsonSettings(score:40)
             print(jsonSettings.convertToString!)
         }
         
     }
     }
-  
-    
 }
 
 struct GameSettingsView_Previews: PreviewProvider {

@@ -56,10 +56,10 @@ let levelName: String                       = "Level 1 - A" //A odpovida Data pr
 var symbolyProZobrazeni: [String]           = symbolyProZobrazeniInit
 
 
-func zobrazNahodnySymbol()                 -> String {
+func zobrazNahodnySymbol(settingsIn: GameSettings)                 -> String {
     var nahodnySymbol                      = ""
-    //pole, ze ktereho budeme brat pismeno    
-    let symbolyProZobrazeni = GameSettings().znakyKZobrazeni
+    //pole, ze ktereho budeme brat pismeno
+    let symbolyProZobrazeni = settingsIn.znakyKZobrazeni
     let indexProZobrazeni                   = Int.random(in: 0...symbolyProZobrazeni.count-1)
     if symbolyProZobrazeni[indexProZobrazeni]  ==  "" {
         for i in indexProZobrazeni...symbolyProZobrazeni.count-1 {
@@ -70,7 +70,7 @@ func zobrazNahodnySymbol()                 -> String {
         }
         for i in 0...symbolyProZobrazeni.count-1 {
             if !(symbolyProZobrazeni[i]        == "") {
-                nahodnySymbol              = symbolyProZobrazeni[i]
+                nahodnySymbol                   = symbolyProZobrazeni[i]
                 return nahodnySymbol
             }
         }

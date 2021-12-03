@@ -31,7 +31,7 @@ struct Bubble3SubView: View {
     @State var positiony:             Double       //= 50
     @State private var lifetimex:     Double  = 10.0 // Double.random(in: 10...20)
     @State private var shouldResetx:  Bool    = false
-    @State var napis:                 String  = zobrazNahodnySymbol()
+    @State var napis:                 String  = ""// zobrazNahodnySymbol(settings: settings)
                                                    /* v pripade kliknuti na bublinu, ktera je oznacitelna, napr. "A",
                                                       se informace prihraje do vybranoStatus - sem - pro zobrazeni a jako globalni informace pro ostatni "A"
                                                       do informacniho pole
@@ -90,7 +90,7 @@ struct Bubble3SubView: View {
     
     var body: some View {
         
-        ZStack {}
+        ZStack {}.onAppear(perform: {napis = zobrazNahodnySymbol(settingsIn: settings)})
         //zakladni podminka pro vykreslovani kazde lokalni bubliny je v teto funkci
         if  bublinaKZobrazeni(IdB: valueFromParent) {
             ZStack() {
@@ -101,7 +101,7 @@ struct Bubble3SubView: View {
                 if vybranoStatus == 1 {
                     Circle().strokeBorder(settings.barva,lineWidth: 3).frame(width: 50, height: 50)
                  }
-                let nahodnySymbol = napis
+                let nahodnySymbol = napis //zobrazNahodnySymbol(settings: settings)
                 if nahodnySymbol.count > 2 {
                     Image(systemName: nahodnySymbol)
                         .font(.largeTitle.weight(.black))
@@ -123,7 +123,7 @@ struct Bubble3SubView: View {
             .opacity(opacityx)
             .onAppear {
                 withAnimation(.easeOut(duration: settings.animationDuration)) {
-                        self.offsetx            = randomOffsetX()//100.0
+                        self.offsetx             = randomOffsetX()//100.0
                         self.offsety             = randomOffsetY() //200.0
                         self.rotatex             = randomRotation()
                     }
@@ -142,7 +142,7 @@ struct Bubble3SubView: View {
                     if (pocetBublinNaPlose<1) {
                         pocetBublinNaPlose  = 0
                         statusMessage       = "You Won!" //konec hry
-                        shouldReset             = true
+                        shouldReset         = true
                     }
                         
                     // play audio after the bubble burst spontaneneously
@@ -172,7 +172,7 @@ struct Bubble3SubView: View {
                         if (pocetBublinNaPlose<1) {
                             pocetBublinNaPlose  = 0
                             statusMessage       = "You Won!" //konec hry
-                            shouldReset             = true
+                            shouldReset         = true
                         }
 
                         stringArray[0]          = String(valueFromParent)
@@ -219,12 +219,12 @@ struct Bubble3SubView: View {
                         }
                         else { // neni to kandidatska bublina, nastav zmizeni bez bodu
                             vybranoStatus           = 2
-                            settings.BubbleF    = settings.BubbleF.replacingOccurrences(of: (String(valueFromParent) + ","), with: (String(valueFromParent) + "-,"))
+                            settings.BubbleF        = settings.BubbleF.replacingOccurrences(of: (String(valueFromParent) + ","), with: (String(valueFromParent) + "-,"))
                             stringArray[1]          = "odebranaNeklicova"
                         }
                         //odstranit pismeno z pole
                                                
-                        shouldReset                     = true
+                        shouldReset                 = true
                     })
             )
         }
