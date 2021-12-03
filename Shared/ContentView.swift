@@ -277,7 +277,7 @@ struct ContentView: View {
                             settings.minDistanceForSingleClick      = 100.0 // disable single click on main screen when settings form is on
                         }
                         Spacer()
-                        Text(settings.horniNapis).foregroundColor(.yellow)
+                        Text(settings.horniNapis.replacingOccurrences(of: "[znakyKVyhledani]", with: settings.znakyKVyhledani[0])).foregroundColor(.yellow)
                         Spacer()
                     }
                 }
@@ -344,6 +344,8 @@ struct ContentView: View {
                 .onEnded(
                     {
                         value in
+                        //test call for learning GameSettingsIO
+                        //print("result write + \(GameSettingsIO.writeStringToDisc(inputString:"abc"))")
                         if true {
                             let cursorX     = value.location.x
                             let cursorY     = value.location.y

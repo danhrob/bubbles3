@@ -36,6 +36,7 @@ struct Bubble3SubView: View {
                                                       se informace prihraje do vybranoStatus - sem - pro zobrazeni a jako globalni informace pro ostatni "A"
                                                       do informacniho pole
                                                    */
+    @State var vyhledej:              String  = "" //s cim se bude porovnavat
     @State private var vybranoStatus: Int     = 0  //v pripade kliknuti na "A" se tato B. oznaci
     var indexPoleHodnot:              Int     = 0
     
@@ -90,7 +91,11 @@ struct Bubble3SubView: View {
     
     var body: some View {
         
-        ZStack {}.onAppear(perform: {napis = zobrazNahodnySymbol(settingsIn: settings)})
+        ZStack {}.onAppear(perform: {
+            napis = zobrazNahodnySymbol(settingsIn: settings)
+            vyhledej = settings.znakyKVyhledani[0] //budeme vyhledavat zatim jen prvni znak
+            //print("Bubble3Subview vyhledej:\(vyhledej)")
+        })
         //zakladni podminka pro vykreslovani kazde lokalni bubliny je v teto funkci
         if  bublinaKZobrazeni(IdB: valueFromParent) {
             ZStack() {
@@ -174,7 +179,6 @@ struct Bubble3SubView: View {
                             statusMessage       = "You Won!" //konec hry
                             shouldReset         = true
                         }
-
                         stringArray[0]          = String(valueFromParent)
                         // play bubble sound after single click on the bubble
                         playAudio()

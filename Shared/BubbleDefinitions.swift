@@ -10,7 +10,7 @@ import SwiftUI
 struct bubbledata: Identifiable, Hashable {
     
     var subviewVisibility: Bool 
-    var id                          = UUID()
+    var id                  = UUID()
     var x: CGFloat
     var y: CGFloat
     var dx: CGFloat
@@ -23,9 +23,8 @@ struct bubbledata: Identifiable, Hashable {
   
 }
 
-let bubbleNumMax: Int               = 50
-
-var score                           = 0
+let bubbleNumMax: Int      = 50
+var score                  = 0
 
 class BubbleToDelegate: ObservableObject {
     
@@ -52,25 +51,25 @@ struct element
 var symbolyProZobrazeniInit: [String]       = []
 let levelName: String                       = "Level 1 - A" //A odpovida Data pro zobrazeni
 
-//var dataProZobrazeni: [String]              = dataProZobrazeniInit
+//var dataProZobrazeni: [String]            = dataProZobrazeniInit
 var symbolyProZobrazeni: [String]           = symbolyProZobrazeniInit
 
 
 func zobrazNahodnySymbol(settingsIn: GameSettings)                 -> String {
-    var nahodnySymbol                      = ""
+    var nahodnySymbol                       = ""
     //pole, ze ktereho budeme brat pismeno
     let symbolyProZobrazeni = settingsIn.znakyKZobrazeni
     let indexProZobrazeni                   = Int.random(in: 0...symbolyProZobrazeni.count-1)
-    if symbolyProZobrazeni[indexProZobrazeni]  ==  "" {
+    if symbolyProZobrazeni[indexProZobrazeni]  ==  ""  {
         for i in indexProZobrazeni...symbolyProZobrazeni.count-1 {
-            if !(symbolyProZobrazeni[i]        == "") {
-                nahodnySymbol              = symbolyProZobrazeni[i]
+            if !(symbolyProZobrazeni[i]        == "" ) {
+                nahodnySymbol               = symbolyProZobrazeni[i]
                 return nahodnySymbol
             }
         }
         for i in 0...symbolyProZobrazeni.count-1 {
-            if !(symbolyProZobrazeni[i]        == "") {
-                nahodnySymbol                   = symbolyProZobrazeni[i]
+            if !(symbolyProZobrazeni[i]     == "") {
+                nahodnySymbol               = symbolyProZobrazeni[i]
                 return nahodnySymbol
             }
         }

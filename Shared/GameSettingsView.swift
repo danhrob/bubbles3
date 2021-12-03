@@ -47,9 +47,24 @@ struct JsonSettings: Codable {
     var barvaRgb                     = ["255", "165", "0"] //Color.orange
 }
 
+//test class for learning
 class GameSettingsIO {
     static func writeStringToDisc(inputString: String) -> String {
-        
+        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = URL(fileURLWithPath: "myFile", relativeTo: directoryURL).appendingPathExtension("txt")
+        // Create data to be saved
+        let myString = "Saving data with FileManager is easy!"
+        guard let data = myString.data(using: .utf8) else {
+            print("Unable to convert string to data")
+            return ""
+        }// Save the data
+        do {
+         try data.write(to: fileURL)
+         print("File saved: \(fileURL.absoluteURL)")
+        } catch {
+         // Catch any errors
+         print(error.localizedDescription)
+        }
         return ""
     }
     
@@ -77,7 +92,7 @@ class GameSettings:                 ObservableObject
     @Published var viditelneScore               = false
     @Published var viditelneLevel               = true
     @Published var SpodniLevelNapis             = "level #2"
-    @Published var horniNapis                   = "find and click \u{03a9}-\u{03a9}"
+    @Published var horniNapis                   = "find and click [znakyKVyhledani]" //[znakyKVyhledani] = replaced variable in text znakyKVyhledani
     @Published var ukazVpravodoleZnaky          = "\u{03a9}-\u{03a9}"
     @Published var znakyKZobrazeni              = ["A","circle","triangle","A","square","\u{05d0}","\u{03a9}"]
     @Published var znakyKVyhledani              = ["\u{03a9}"]
@@ -100,17 +115,25 @@ struct GameSettingsView : View {
     @State private var lettersToView: String    = "A,B,C,D"
     @State private var lettersToFind: String    = "A"
     @State var znakyKZobrazeni: [String]        = ["C","D","A"]
+    @State var znakyKVyhledani: [String]        = ["C","D","A"]
+    @State var horniNapis: String               = "find and click [znakyKVyhledani]"
 
     func getInputStringKZobrazeni() -> String {
         let znakyKZobrazeniF : [String] = settings.znakyKZobrazeni
         return znakyKZobrazeniF.joined(separator: ",")
     }
     
+    func getInputStringKVyhledani() -> String {
+        let znakyKVyhledaniF : [String] = settings.znakyKVyhledani
+        return znakyKVyhledaniF.joined(separator: ",")
+    }
+    
     func cancelSettingsScreen () {
         viditelnaObrazovkaNastaveni             = false
         settings.viditelnaObrazovkaNastaveni    = false
         settings.minDistanceForSingleClick      = 0 // set it can react for single click(drag 0 points) on main layer
-        print("cancelSettingsScreen GameSettingsView settings.znakyKZobrazeni:\(settings.znakyKZobrazeni), znakyKZobrazeni:\(znakyKZobrazeni) ")
+        // print("cancelSettingsScreen GameSettingsView settings.znakyKZobrazeni:\(settings.znakyKZobrazeni), znakyKZobrazeni:\(znakyKZobrazeni) ")
+        print("cancelSettingsScreen GameSettingsView settings.znakyKVyhledani:\(settings.znakyKVyhledani), znakyKVyhledani:\(znakyKVyhledani) ")
     }
     
     init () {
@@ -136,11 +159,17 @@ struct GameSettingsView : View {
                            .onAppear(perform: {
                             lettersToView = getInputStringKZobrazeni()
                            })
+                        TextField("Enter letter to find", text: $lettersToFind)
+                           .onAppear(perform: {
+                            lettersToFind = getInputStringKVyhledani()
+                           })
                         Button("Save letters settings") {
 
                             lettersSettingsDialog = false
                             settings.znakyKZobrazeni = lettersToView.components(separatedBy:",")
+                            settings.znakyKVyhledani = lettersToFind.components(separatedBy:",")
                             // print("letters settings lettersToView:\(lettersToView)")
+                            print("letters settings lettersToFind:\(lettersToFind)")
                         }
                     }
                 }
@@ -150,10 +179,14 @@ struct GameSettingsView : View {
             }.padding()
             Section {
                 Button("Save and continue") {
-                    settings.znakyKZobrazeni = lettersToView.components(separatedBy:",")
+                    settings.znakyKZobrazeni    = lettersToView.components(separatedBy:",")
+                    settings.znakyKVyhledani    = lettersToFind.components(separatedBy: ",")
+                    settings.ukazVpravodoleZnaky = settings.znakyKVyhledani[0] + "-" + settings.znakyKVyhledani[0]
+                    settings.horniNapis         =  horniNapis.replacingOccurrences(of: "[znakyKVyhledani]", with: settings.znakyKVyhledani[0])
                     cancelSettingsScreen()
                     //print("button Save and continue")
                     //print("Save and continue lettersToView:\(lettersToView), znakyKZobrazeni:\(settings.znakyKZobrazeni)")
+                    print("Save and continue lettersToFind:\(lettersToView), znakyKVyhledani:\(settings.znakyKVyhledani)")
                 }
                 Button("Exit") {
                     //print("Exit")
