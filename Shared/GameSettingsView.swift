@@ -10,10 +10,10 @@ import SwiftUI
 
 extension Encodable {
     var convertToString: String? {
-        let jsonEncoder = JSONEncoder()
+        let jsonEncoder              = JSONEncoder()
         jsonEncoder.outputFormatting = .prettyPrinted
         do {
-            let jsonData = try jsonEncoder.encode(self)
+            let jsonData             = try jsonEncoder.encode(self)
             return String(data: jsonData, encoding: .utf8)
         } catch {
             return nil
@@ -34,7 +34,7 @@ struct User: Codable {
 }
 
 struct JsonSettings: Codable {
-    var score:      Int
+    var score: Int                   = 40
     var SpodniLevelNapis             = "level #2"
     var horniNapis                   = "find and click A-A"
     var ukazVpravodoleZnaky          = "A-A"
@@ -47,14 +47,23 @@ struct JsonSettings: Codable {
     var barvaRgb                     = ["255", "165", "0"] //Color.orange
 }
 
-//test class for learning
+//test class for testing write and read to disc
+//path to app can be Bundle.main.path(forResource: "file1", ofType: "txt")  but is read only
 class GameSettingsIO {
-    static func writeStringToDisc(inputString: String) -> String {
-        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileURL = URL(fileURLWithPath: "myFile", relativeTo: directoryURL).appendingPathExtension("txt")
+    
+    static func getDocumentsDirectory() -> URL {
+        let paths                   = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory      = paths[0]
+        print("document's directory\(documentsDirectory)")
+        return documentsDirectory
+    }
+    
+    static func writeStringToDisc(inputString: String, inputFileName: String, inputExtension: String) -> String {
+        let directoryURL    = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL         = URL(fileURLWithPath: inputFileName, relativeTo: directoryURL).appendingPathExtension(inputExtension)
         // Create data to be saved
-        let myString = "Saving data with FileManager is easy!"
-        guard let data = myString.data(using: .utf8) else {
+        let myString        = inputString
+        guard let data      = myString.data(using: .utf8) else {
             print("Unable to convert string to data")
             return ""
         }// Save the data
@@ -68,16 +77,45 @@ class GameSettingsIO {
         return ""
     }
     
+    static func writeConfigFile(jsonString: String) -> String {
+        //it should be user documents directory with for possible access to write
+        let result: String    = GameSettingsIO.writeStringToDisc(inputString: jsonString, inputFileName: "bubblesConfig", inputExtension: "txt")
+        print("result write: \(result)")
+        return result
+    }
+    
     static func getZnakyKZobrazeniJoin(inputStringF: [String]) -> String {
         let inputStringField = inputStringF.joined(separator:",")
         return inputStringField
+    }
+    
+    static func prepareJsonSettingsString(jsonSettings: JsonSettings) -> String {
+        let jsonSettingsConverted = jsonSettings.convertToString!
+        print("jsonSettingsConverted:\(jsonSettingsConverted)")
+        return jsonSettingsConverted
+    }
+    
+    static func convertGameSettingsToJsonSettings(gameSettings: GameSettings) -> JsonSettings {
+        var jsonSettings = JsonSettings()
+        jsonSettings.score                      = gameSettings.score
+        jsonSettings.SpodniLevelNapis           = gameSettings.SpodniLevelNapis
+        jsonSettings.horniNapis                 = gameSettings.horniNapis
+        jsonSettings.ukazVpravodoleZnaky        = gameSettings.ukazVpravodoleZnaky
+        jsonSettings.znakyKZobrazeni            = gameSettings.znakyKZobrazeni
+        jsonSettings.animationDuration          = gameSettings.animationDuration
+        jsonSettings.lifeDuration               = gameSettings.lifeDuration
+        jsonSettings.rozptylLifeDuration        = gameSettings.rozptylLifeDuration
+        jsonSettings.casoveUkonceniZivotaBubl   = gameSettings.casoveUkonceniZivotaBubl
+        jsonSettings.znakyKVyhledani            = gameSettings.znakyKVyhledani
+        jsonSettings.barvaRgb                   = gameSettings.barvaRgb //Color.orange
+        return jsonSettings
     }
     
 }
 
 class GameSettings:                 ObservableObject
 {
-    @Published var score                        = 0
+    @Published var score: Int                        = 0
     @Published var oznaceno                     = 0
     @Published var barvaRgb                     = ["255", "165", "0"]
     @Published var barva                        = Color.orange
@@ -184,9 +222,12 @@ struct GameSettingsView : View {
                     settings.ukazVpravodoleZnaky = settings.znakyKVyhledani[0] + "-" + settings.znakyKVyhledani[0]
                     settings.horniNapis         =  horniNapis.replacingOccurrences(of: "[znakyKVyhledani]", with: settings.znakyKVyhledani[0])
                     cancelSettingsScreen()
+                    //write config to json file
+                    _ = GameSettingsIO.writeConfigFile(jsonString: GameSettingsIO.prepareJsonSettingsString(jsonSettings: GameSettingsIO.convertGameSettingsToJsonSettings(gameSettings: settings)))
                     //print("button Save and continue")
                     //print("Save and continue lettersToView:\(lettersToView), znakyKZobrazeni:\(settings.znakyKZobrazeni)")
                     print("Save and continue lettersToFind:\(lettersToView), znakyKVyhledani:\(settings.znakyKVyhledani)")
+                    
                 }
                 Button("Exit") {
                     //print("Exit")

@@ -344,8 +344,6 @@ struct ContentView: View {
                 .onEnded(
                     {
                         value in
-                        //test call for learning GameSettingsIO
-                        //print("result write + \(GameSettingsIO.writeStringToDisc(inputString:"abc"))")
                         if true {
                             let cursorX     = value.location.x
                             let cursorY     = value.location.y
