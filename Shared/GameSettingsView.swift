@@ -204,6 +204,7 @@ struct GameSettingsView : View {
                         Button("Save letters settings") {
 
                             lettersSettingsDialog = false
+                            //lettersToView = getInputStringKZobrazeni()
                             settings.znakyKZobrazeni = lettersToView.components(separatedBy:",")
                             settings.znakyKVyhledani = lettersToFind.components(separatedBy:",")
                             // print("letters settings lettersToView:\(lettersToView)")
@@ -217,7 +218,9 @@ struct GameSettingsView : View {
             }.padding()
             Section {
                 Button("Save and continue") {
+                    lettersToView = getInputStringKZobrazeni()
                     settings.znakyKZobrazeni    = lettersToView.components(separatedBy:",")
+                    lettersToFind = getInputStringKVyhledani()
                     settings.znakyKVyhledani    = lettersToFind.components(separatedBy: ",")
                     settings.ukazVpravodoleZnaky = settings.znakyKVyhledani[0] + "-" + settings.znakyKVyhledani[0]
                     settings.horniNapis         =  horniNapis.replacingOccurrences(of: "[znakyKVyhledani]", with: settings.znakyKVyhledani[0])
