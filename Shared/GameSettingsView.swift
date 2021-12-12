@@ -111,6 +111,40 @@ class GameSettingsIO {
         return jsonSettings
     }
     
+    //------- READ SECTION ---------
+    static func readConfigFile() -> String {
+        //it should be user documents directory with for possible access to write
+        let directoryURL        = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL             = URL(fileURLWithPath: "bubblesConfig", relativeTo: directoryURL).appendingPathExtension("txt")
+         do {
+        
+            let configContent   = try String(contentsOf: fileURL, encoding: .utf8)
+            print("result read: \(configContent)")
+            return configContent
+            
+        }
+        catch {
+            print("error reading bubblesConfig.txt file")
+        }
+        return ""
+    }
+    
+    static func convertJsonSettingsToGameSettings(jasonSettings: JsonSettings) -> GameSettings {
+        let jsonSettings                    = JsonSettings()
+        let gameSettings                    = GameSettings()
+        gameSettings.score                  = jsonSettings.score
+        gameSettings.SpodniLevelNapis       = jsonSettings.SpodniLevelNapis
+        gameSettings.horniNapis             = jsonSettings.horniNapis
+        gameSettings.ukazVpravodoleZnaky    = jsonSettings.ukazVpravodoleZnaky
+        gameSettings.znakyKZobrazeni        = jsonSettings.znakyKZobrazeni
+        gameSettings.animationDuration      = jsonSettings.animationDuration
+        gameSettings.lifeDuration           = jsonSettings.lifeDuration
+        gameSettings.rozptylLifeDuration    = jsonSettings.rozptylLifeDuration
+        gameSettings.casoveUkonceniZivotaBubl   = jsonSettings.casoveUkonceniZivotaBubl
+        gameSettings.znakyKVyhledani        = jsonSettings.znakyKVyhledani
+        gameSettings.barvaRgb               = jsonSettings.barvaRgb //Color.orange
+        return gameSettings
+    }
 }
 
 class GameSettings:                 ObservableObject
@@ -213,7 +247,10 @@ struct GameSettingsView : View {
                     }
                 }
                 Button("Default settings") {print("button Default settings")}
-                
+                Button("Load settings") {
+                    let configFileStrJson = GameSettingsIO.readConfigFile()
+                    print("loaded Saved settings:\(configFileStrJson)")}
+                    
                 
             }.padding()
             Section {
